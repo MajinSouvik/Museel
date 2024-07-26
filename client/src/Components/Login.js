@@ -1,20 +1,98 @@
-import React from "react"
-import { Button } from "@mui/material"
+import { Box, Button, TextField, Typography } from "@mui/material";
+import axios from "axios";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {login} from "../redux/authSlice"
+import {setUser, setUserID} from "../redux/userSlice"
 
-// const AUTH_URL="https://accounts.spotify.com/authorize?client_id=89798a818e114cf8bba2a7f4cfe2d83c&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state"
+const Login = () => {
+  const dispatch = useDispatch();
+  const history = useNavigate();
 
-function Login(){
-    const getAuthUrl=()=>{
-        fetch("http://localhost:8000/spotify/auth-url")
-        .then(resp=>resp.json())
-        .then(data=>{
-            console.log(data.url)
-            window.location.replace(data.url)
-        })
-        .catch(err=>console.log(err))
-    }
+  const [inputs, setInputs] = useState({
+    username: "",
+    password: "",
+  });
 
-    return (<Button onClick={()=>getAuthUrl()}>login</Button>)
-}
+  const handleChange = (e) => {
+    setInputs((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-export default Login
+  const sendRequest = async () => {
+    const res = await axios
+      .post("http://localhost:8000/auth/api/token/", {
+        username: inputs.username,
+        password: inputs.password,
+      })
+      .catch((err) => console.log(err));
+
+    const data = await res.data;
+    return data;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // send http request
+  sendRequest()
+      .then((data) => {
+        console.log(data)
+        localStorage.setItem("token",data.access_token)
+        localStorage.setItem("refresh",data.refresh_token)
+        localStorage.setItem("user_id",data.user.id)
+        
+        localStorage.setItem("user",data.user.username)
+        console.log("BiggBoss-->",localStorage);
+        dispatch(login())
+        dispatch(setUser(data.user.username))
+        dispatch(setUserID(data.user.id))
+      })
+      .then(() => history("/"));
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <Box
+          marginLeft="auto"
+          marginRight="auto"
+          width={300}
+          display="flex"
+          flexDirection={"column"}
+          justifyContent="center"
+          alignItems="center"
+        >
+            <Typography variant="h2">Login</Typography>
+
+            <TextField
+                name="username"
+                onChange={handleChange}
+                value={inputs.username}
+                variant="outlined"
+                placeholder="Username"
+                margin="normal"
+            />
+
+            <TextField
+                name="password"
+                onChange={handleChange}
+                type="password"
+                value={inputs.password}
+                variant="outlined"
+                placeholder="Password"
+                margin="normal"
+            />
+
+            <Button variant="contained" type="submit">
+                Login
+            </Button>
+        </Box>
+      </form>
+    </div>
+  );
+};
+
+export default Login;

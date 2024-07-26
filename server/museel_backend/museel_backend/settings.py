@@ -39,8 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'spotify',
+    'user',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'corsheaders'
 ]
 
@@ -58,7 +60,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'museel_backend.urls'
-# CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
 TEMPLATES = [
     {
@@ -88,6 +90,18 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'Museel',
+#         'CLIENT': {
+#            'host': 'mongodb+srv://Souvik:SKisoerZ7L8JMRsZ@cluster0.m5bi1ep.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+#            'username':'Souvik',
+#            'password':'SKisoerZ7L8JMRsZ'
+#         }
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
@@ -148,3 +162,16 @@ CORS_ALLOW_METHODS = [
     'DELETE',
     'OPTIONS',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+    ]
+}
+
+
+
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'ROTATE_REFRESH_TOKENS' : True
+}

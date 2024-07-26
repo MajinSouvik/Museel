@@ -1,15 +1,19 @@
 from django.db import models
+from django.contrib.auth.models import User
 
+class Album(models.Model):
+    name=models.CharField(max_length=500)
+    image=models.URLField()
 
-# imgUrl1,
-#                 imgUrl2,
-#                 trackUrl,
-#                 previewUrl,
-#                 name
-# Create your models here.
 class Song(models.Model):
     name=models.CharField(max_length=500)
-    imgUrl1=models.URLField()
-    imgUrl2=models.URLField()
-    trackUrl=models.URLField()
-    previewUrl=models.URLField()
+    tracks=models.JSONField(default=list)
+    images=models.JSONField(default=list)
+    artists=models.JSONField(default=list)
+    likes=models.IntegerField(default=0)
+    album=models.ForeignKey(Album, on_delete=models.CASCADE ,related_name='songs')
+    
+class Comment(models.Model):
+    text=models.TextField(blank=True, null=True)
+    song=models.ForeignKey(Song, on_delete=models.CASCADE, related_name='comments')
+    user=models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments', null=True, blank=True)

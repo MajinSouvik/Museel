@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-function AudioPlayer({ src }){
+function AudioPlayer({ src }) {
   const audioRef = useRef(null);
 
   const playAudio = () => {
@@ -11,15 +11,22 @@ function AudioPlayer({ src }){
     audioRef.current.pause();
   };
 
+  const handleClick=(e)=>{
+    e.preventDefault();
+    e.target.muted=!e.target.muted
+  }
+
   return (
-    <div>
-      <audio ref={audioRef} src={src} controls />
-      <div>
-        <button onClick={playAudio}>Play</button>
-        <button onClick={pauseAudio}>Pause</button>
-      </div>
+    <div className="flex space-x-2">
+      <audio 
+        ref={audioRef} 
+        src={src} 
+        onClick={(e)=>handleClick(e)} 
+        controls
+      />
     </div>
   );
-};
+}
+
 
 export default AudioPlayer;

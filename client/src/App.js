@@ -1,39 +1,18 @@
-import Trending from "./Components/Trending";
-import Login from "./Components/Login";
-import {connect} from "react-redux"
-import useAuth from "./Components/useAuth";
-import { useEffect } from "react";
 import Reels from "./Components/Reels";
 import UploadSong from "./Components/UploadSong";
+import {useSelector} from "react-redux"
+import axios from "axios";
+axios.defaults.withCredentials = true;
 
-const code=new URLSearchParams(window.location.search).get("code");
-
-function App(props) {
+function App() {
+  const user=useSelector((store)=>store.user.user)
   return (
-    <div>
-      <Reels />
+    <div className="snap-y grid place-items-center">
+        <h1>Hello {user}</h1>
+        <Reels />
+        {/* <UploadSong /> */}
     </div>
-    // <UploadSong />
   )
-  // const newToken=useAuth(code)
-
-  // useEffect(()=>{
-  //   if (!newToken) return;
-  //   props.changeToken(newToken)
-  // },[newToken])
- 
-  // return (props.token?<Trending />:<Login />) 
-  // return (props.token?<Reels />:<Login />) 
 }
 
-const mapStateToProps=(state)=>{
-  return {token:state.auth.token}
-}
-
-const mapDispatchToProps = (dispatch)=>{
-  return {
-    changeToken:(t)=>dispatch({type:"TOKEN",payload:t})
-  }
-}
-
-export default connect(mapStateToProps,mapDispatchToProps)(App);
+export default App;

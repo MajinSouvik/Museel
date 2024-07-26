@@ -1,24 +1,26 @@
-import CottageIcon from '@mui/icons-material/Cottage';
-import SearchIcon from '@mui/icons-material/Search';
-import SearchComponent from "./SearchComponent";
+import {useSelector} from 'react-redux';
+import AudioPlayer from "./AudioPlayer"
+import MusicHeader from './MusicHeader';
+import MusicBody from "./MusicBody";
+import Search from './Search';
+import Result from './Result';
 
-function Music(){
+function Music(props){
+    const album=useSelector((store)=>store.album.album)
+    const music=useSelector((store)=>store.music.music)
+
+    if(Object.keys(album).length===0)return <h1>No Album</h1>
+    if(Object.keys(music).length===0)return <h1>No Music</h1>
+
     return(
         <div>
-            <div className="text-2xl space-y-2 mt-3 border-2 border-indigo-400 w-80">
-                <div className="flex items-center space-x-4 ">
-                    <CottageIcon className="mt-1"/>
-                    <p>Home</p>
-                </div>
-
-                <div className="flex items-center space-x-4 ">
-                    <SearchIcon className="mt-1"/>
-                    <p>Search</p>
-                </div>
-            </div>
-            <SearchComponent />
+            <Search />
+            <Result />
+            <MusicHeader image={album.image} title={album.name} />
+            <p className="mt-6">Tracks</p>
+            <MusicBody songs={album.songs} />
+            <AudioPlayer src={music.tracks[0]} />
         </div>
-        
     )
 }
 

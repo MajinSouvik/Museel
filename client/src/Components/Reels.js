@@ -1,32 +1,38 @@
-import {useEffect,useState} from "react"
-import AudioPlayer from "./AudioPlayer"
+import {useEffect} from "react"
+import {useSelector, useDispatch} from "react-redux"
+import {upload} from "../redux/reelSlice"
+import Reel from "./Reel"
 
-function Reels(props){
-    const [image, setImage]=useState(null)
-    const [audioLink,setAudioLink]=useState(null)
-    const [name,setName]=useState(null)
+function Reels(){
+    const reels=useSelector((store)=>store.reels.reels)
+    const dispatch = useDispatch()
 
     useEffect(()=>{
         const getReels=()=>{
-            fetch("http://localhost:8000/app/load")
+            fetch("http://localhost:8000/app/upload-song/")
             .then(resp=>resp.json())
             .then(data=>{
-                console.log(data)
-                setImage(data.imgUrl1)
-                setAudioLink(data.previewUrl)
-                setName(data.name)
+                dispatch(upload(data))
             })
         }
         getReels()
-    })
-    
+    },[])
+
     return (
-    <div onClick={()=>console.log("Hey u are doing great!")}>
-        <h1>Reels!</h1>
-        <AudioPlayer src={audioLink} />
-        <img src={image} alt="Habibi"/>
+    <div className="relative left-[220px] h-[95vh] w-[100%] rounded-[20px] max-w-[1000px] max-h-[1200px] overflow-scroll snap-y no-scrollbar ">
+        {
+            reels.map(reel=>{
+                return(
+                    <Reel 
+                        musicId={reel.id}
+                        albumId={reel.album}
+                        name={reel.name} 
+                        image={reel.images[0]} 
+                        track={reel.tracks[1]} 
+                    />
+            )})
+        }
     </div>)
 }
-
 
 export default Reels

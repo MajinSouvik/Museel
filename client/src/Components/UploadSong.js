@@ -13,6 +13,10 @@ function UploadSong(){
     const [imgUrl1, setImageUrl1]=useState(null)
     const [imgUrl2, setImageUrl2]=useState(null)
     const [name,setName]=useState(null)
+    const [album, setAlbum]=useState(null)
+    const [albumImage, setAlbumImage]=useState(null)
+    const [albumImageUrl, setAlbumImageUrl]=useState(null)
+    const [artists, setArtists]=useState([])
 
     const isPossible=()=>{
         if(track===null || preview===null || name===null || img1===null || img2===null){
@@ -29,7 +33,7 @@ function UploadSong(){
         console.log("imgUrl1--->", imgUrl1)
         console.log("imgUrl2--->", imgUrl2)
         
-        if(trackUrl===null || previewUrl===null || name===null || imgUrl1===null || imgUrl2===null){
+        if(trackUrl===null || previewUrl===null || name===null || imgUrl1===null || imgUrl2===null || albumImage===null){
             return false
         }
         return true
@@ -42,6 +46,7 @@ function UploadSong(){
             helper(preview,"preview")
             helper(img1,"img1")
             helper(img2,"img2")
+            helper(albumImage,"albumImage")
 
             if(isReallyPossible()){
                 console.log("API gets called !!")
@@ -61,11 +66,14 @@ function UploadSong(){
                 imgUrl2,
                 trackUrl,
                 previewUrl,
-                name
+                name,
+                album,
+                artists,
+                image:albumImageUrl
               })
         }
 
-        fetch("http://localhost:8000/app/upload",params)
+        fetch("http://localhost:8000/app/upload-song/",params)
         .then(resp=>resp.json())
         .then(data=>console.log(data))
     }
@@ -80,8 +88,10 @@ function UploadSong(){
                     setPreviewUrl(url)
                 }else if(type==="img1"){
                     setImageUrl1(url)
-                }else{
+                }else if(type==="img2"){
                     setImageUrl2(url)
+                }else{
+                    setAlbumImageUrl(url)
                 }
             })
             alert("File uploaded !!")
@@ -100,11 +110,20 @@ function UploadSong(){
             <label>Image2:</label>
             <input type="file" onChange={(e)=>setImage2(e.target.files[0])}/>
             <br />
+            <label>AlbumImage:</label>
+            <input type="file" onChange={(e)=>setAlbumImage(e.target.files[0])}/>
+            <br />
             <label>Track:</label>
             <input type="file" onChange={(e)=>setTrack(e.target.files[0])} />
             <br />
             <label>Preview:</label>
             <input type="file" onChange={(e)=>setPreview(e.target.files[0])}/>
+            <br />
+            <label>Artists:</label>
+            <input type="text" placeholder="Artists" onChange={(e)=>setArtists(e.target.value)}/>
+            <br />
+            <label>Album:</label>
+            <input type="text" placeholder="Album" onChange={(e)=>setAlbum(e.target.value)}/>
             <br />
             <button onClick={(e)=>uploadFile(e)}>Upload</button>
         </form>

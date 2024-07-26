@@ -1,7 +1,12 @@
-from django.urls import path
-from .views import upload_song,get_song
+from django.urls import path,include
+from rest_framework.routers import DefaultRouter
+from app.views import SongVS, AlbumVS,CommentVS
+
+router=DefaultRouter()
+router.register('upload-song', SongVS, basename='song')
+router.register('album',AlbumVS, basename='album'),
+router.register('comment', CommentVS, basename='comment')
 
 urlpatterns = [
-    path('upload', upload_song),
-    path('load',get_song)
+    path('',include(router.urls))
 ]
