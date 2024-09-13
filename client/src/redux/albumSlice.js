@@ -4,16 +4,21 @@ const albumSlice=createSlice({
     name:"album",
 
     initialState:{
-        album:{}
+        album:{},
+        allAlbums:[]
     },
 
     reducers:{
         uploadAlbum:(state,action)=>{
           state.album=action.payload  
+        },
+
+        setAlbums:(state,action)=>{
+            state.allAlbums=action.payload
         }
     }
 })
 
-export const {uploadAlbum}=albumSlice.actions
+export const {uploadAlbum,setAlbums}=albumSlice.actions
 export default albumSlice.reducer
 

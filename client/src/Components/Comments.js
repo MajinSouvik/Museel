@@ -14,8 +14,6 @@ function Comments({id}){
             .then(resp=>resp.json())
             .then(data=>{
                 setComments(data.comments)
-                console.log("Inside Comments-->",data.comments)
-                // dispatch(uploadMusic(data))
             })
         }
         getSong()

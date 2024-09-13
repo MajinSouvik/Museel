@@ -34,7 +34,6 @@ class SongVS(viewsets.ViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        print("Erres-->",serializer.errors)
         return Response(serializer.errors)
 
 

@@ -1,27 +1,49 @@
-import {useSelector} from 'react-redux';
-import AudioPlayer from "./AudioPlayer"
+import { useSelector } from 'react-redux';
+import AudioPlayer from "./AudioPlayer";
 import MusicHeader from './MusicHeader';
 import MusicBody from "./MusicBody";
 import Search from './Search';
-import Result from './Result';
+import useGetAllAlbums from '../hooks/useGetAllAlbums';
+import Albums from './Albums';
 
-function Music(props){
-    const album=useSelector((store)=>store.album.album)
-    const music=useSelector((store)=>store.music.music)
+function Music() {
+    const albums=useSelector((store)=>store.album.allAlbums)
+    const album = useSelector((store) => store.album.album);
+    const music = useSelector((store) => store.music.music);
 
-    if(Object.keys(album).length===0)return <h1>No Album</h1>
-    if(Object.keys(music).length===0)return <h1>No Music</h1>
+    useGetAllAlbums()
 
-    return(
-        <div>
+    if (Object.keys(album).length === 0) return <h1 className="text-center text-2xl mt-20">No Album Found</h1>;
+    if (Object.keys(music).length === 0) return <h1 className="text-center text-2xl mt-20">No Music Available</h1>;
+
+    return (
+        <div className="bg-gray-900 text-white min-h-screen p-4">
             <Search />
-            <Result />
-            <MusicHeader image={album.image} title={album.name} />
-            <p className="mt-6">Tracks</p>
-            <MusicBody songs={album.songs} />
-            <AudioPlayer src={music.tracks[0]} />
+            {/* <Result /> */}
+            <div className="grid grid-cols-4 gap-8">
+                {/* Sidebar */}
+                <div className="col-span-1 bg-gray-800 p-4 rounded-md">
+                    <h2 className="text-lg font-semibold mb-4">Browse Albums</h2>
+                    {/* Add more items like playlists, favorites, etc. */}
+                    <Albums albums={albums} />
+                </div>
+
+                {/* Main Content */}
+                <div className="col-span-3">
+                    <MusicHeader image={album.image} title={album.name} />
+                    <div className="mt-6">
+                        <p className="text-lg font-semibold">Tracks</p>
+                        <MusicBody songs={album.songs} />
+                    </div>
+                </div>
+            </div>
+
+            {/* Sticky Audio Player */}
+            <div className="fixed bottom-0 left-0 right-0 bg-gray-800 p-4 shadow-lg">
+                <AudioPlayer src={music.tracks[0]} image={music.images[0]} />
+            </div>
         </div>
-    )
+    );
 }
 
-export default Music
+export default Music;

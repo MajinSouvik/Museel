@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {login} from "../redux/authSlice"
-import {setUser, setUserID} from "../redux/userSlice"
+import {setUser} from "../redux/userSlice"
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -39,16 +39,22 @@ const Login = () => {
     // send http request
   sendRequest()
       .then((data) => {
-        console.log(data)
-        localStorage.setItem("token",data.access_token)
-        localStorage.setItem("refresh",data.refresh_token)
-        localStorage.setItem("user_id",data.user.id)
+        console.log("login-data-->",data)
+        const authTokens={
+          "access":data.access_token,
+          "refresh":data.refresh_token
+        }
+        dispatch(login(authTokens))
+        dispatch(setUser(data.user))
+        // localStorage.setItem("token",data.access_token)
+        // localStorage.setItem("refresh",data.refresh_token)
+        // localStorage.setItem("user_id",data.user.id)
         
-        localStorage.setItem("user",data.user.username)
-        console.log("BiggBoss-->",localStorage);
-        dispatch(login())
-        dispatch(setUser(data.user.username))
-        dispatch(setUserID(data.user.id))
+        // localStorage.setItem("user",data.user.username)
+        // console.log("BiggBoss-->",localStorage);
+        // dispatch(login())
+        // dispatch(setUser(data.user.username))
+        // dispatch(setUserID(data.user.id))
       })
       .then(() => history("/"));
   };

@@ -4,21 +4,27 @@ const userSlice=createSlice({
     name:"user",
 
     initialState:{
-        user: localStorage.getItem("user"),
-        userID: localStorage.getItem("user_id")
+        // user: localStorage.getItem("user"),
+        // userID: localStorage.getItem("user_id")
     },
 
     reducers:{
         setUser:(state,action)=>{
-            state.user=action.payload
+            return action.payload
+            // state.user=action.payload
         },
 
-        setUserID:(state,action)=>{
-            state.userID=action.payload
+        removeUser:(state)=>{
+            return null
         }
+
+
+        // setUserID:(state,action)=>{
+        //     state.userID=action.payload
+        // }
     }
 })
 
-export const {setUser,setUserID}=userSlice.actions
+export const {setUser, removeUser}=userSlice.actions
 export default userSlice.reducer
 

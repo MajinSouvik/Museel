@@ -4,14 +4,15 @@ const authSlice=createSlice({
     name:"auth",
 
     initialState:{
-        isLoggedIn: localStorage.getItem("token"),
-        refresh:localStorage.getItem("refresh")
+        // isLoggedIn: localStorage.getItem("token"),
+        // refresh:localStorage.getItem("refresh")
     },
 
     reducers:{
-        login:(state)=>{
-            state.isLoggedIn=localStorage.getItem("token")
-            state.refresh=localStorage.getItem("refresh")
+        login:(state,action)=>{
+            return action.payload
+            // state.isLoggedIn=localStorage.getItem("token")
+            // state.refresh=localStorage.getItem("refresh")
         }
     }
 })
