@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-sr2apw75cot$oiui4(o*0^=xs3haqyo2v3+oo2!yseq%+t9^@s
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost']
+AUTH_USER_MODEL='user.CustomUser'
 
 
 # Application definition
@@ -38,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
-    'spotify',
     'user',
     'rest_framework',
     'rest_framework.authtoken',

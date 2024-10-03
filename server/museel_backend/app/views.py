@@ -24,10 +24,10 @@ class SongVS(viewsets.ViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
+        print("errors-->", serializer.errors)
         return Response(serializer.errors)
     
     def update(self,request,pk=None):
-        print(request.data)
         queryset=Song.objects.all()
         song=get_object_or_404(queryset, pk=pk)
         serializer=CommentSerializer(data=request.data)

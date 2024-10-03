@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useDispatch , useSelector} from "react-redux";
 import { uploadAlbum } from "../redux/albumSlice";
 import useGetAllAlbums from "../hooks/useGetAllAlbums";
@@ -11,27 +10,6 @@ function Search() {
 
   useGetAllAlbums()
   useGetAllSongs()
-  
-  // useEffect(() => {
-  //   const getAllSongs = () => {
-  //     fetch("http://localhost:8000/app/upload-song/")
-  //       .then((resp) => resp.json())
-  //       .then((data) => {
-  //         setSongs(data);
-  //       });
-  //   };
-
-  //   const getAllAlbums = () => {
-  //     fetch("http://localhost:8000/app/album/")
-  //       .then((resp) => resp.json())
-  //       .then((data) => {
-  //         setAlbums(data);
-  //       });
-  //   };
-  //   getAllSongs();
-  //   getAllAlbums();
-  // }, []);
-
   
   const handleChange = (name) => {
     

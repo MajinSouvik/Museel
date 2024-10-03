@@ -11,7 +11,6 @@ function useGetAllSongs(){
     const getAll = async () => {
       try {
         const response = await axios.get("http://localhost:8000/app/upload-song/");
-        console.log("album-->", response);
         dispatch(setSongs(response.data))
       } catch (error) {
         console.error("Error fetching posts:", error);

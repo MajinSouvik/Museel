@@ -1,104 +1,36 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
-import axios from "axios";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import {login} from "../redux/authSlice"
-import {setUser} from "../redux/userSlice"
+import React, { useState } from 'react';
+import { loginUser, logoutUser } from '../services/authService';
+import {useNavigate} from "react-router-dom"
 
-const Login = () => {
-  const dispatch = useDispatch();
-  const history = useNavigate();
+const LoginComponent = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate=useNavigate()
 
-  const [inputs, setInputs] = useState({
-    username: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    setInputs((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+  const handleLogin = async () => {
+    try {
+      await loginUser(username, password);
+      // console.log('User logged in:', user);
+      console.log("navigating to App...")
+      navigate("/")
+    } catch (error) {
+      console.error('Login failed', error);
+    }
   };
 
-  const sendRequest = async () => {
-    const res = await axios
-      .post("http://localhost:8000/auth/api/token/", {
-        username: inputs.username,
-        password: inputs.password,
-      })
-      .catch((err) => console.log(err));
-
-    const data = await res.data;
-    return data;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // send http request
-  sendRequest()
-      .then((data) => {
-        console.log("login-data-->",data)
-        const authTokens={
-          "access":data.access_token,
-          "refresh":data.refresh_token
-        }
-        dispatch(login(authTokens))
-        dispatch(setUser(data.user))
-        // localStorage.setItem("token",data.access_token)
-        // localStorage.setItem("refresh",data.refresh_token)
-        // localStorage.setItem("user_id",data.user.id)
-        
-        // localStorage.setItem("user",data.user.username)
-        // console.log("BiggBoss-->",localStorage);
-        // dispatch(login())
-        // dispatch(setUser(data.user.username))
-        // dispatch(setUserID(data.user.id))
-      })
-      .then(() => history("/"));
+  const handleLogout = () => {
+    logoutUser();
+    console.log('User logged out');
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <Box
-          marginLeft="auto"
-          marginRight="auto"
-          width={300}
-          display="flex"
-          flexDirection={"column"}
-          justifyContent="center"
-          alignItems="center"
-        >
-            <Typography variant="h2">Login</Typography>
-
-            <TextField
-                name="username"
-                onChange={handleChange}
-                value={inputs.username}
-                variant="outlined"
-                placeholder="Username"
-                margin="normal"
-            />
-
-            <TextField
-                name="password"
-                onChange={handleChange}
-                type="password"
-                value={inputs.password}
-                variant="outlined"
-                placeholder="Password"
-                margin="normal"
-            />
-
-            <Button variant="contained" type="submit">
-                Login
-            </Button>
-        </Box>
-      </form>
+      <input type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
+      <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+      <button onClick={handleLogin}>Login</button>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };
 
-export default Login;
+export default LoginComponent;

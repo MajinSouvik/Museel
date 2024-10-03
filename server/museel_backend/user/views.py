@@ -2,29 +2,56 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from user.serializers import RegistrationSerializer,UserSerializer
-from django.contrib.auth.models import User
+from user.serializers import UserSerializer
+# from django.contrib.auth.models import User
 from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import AccessToken, TokenError
+from rest_framework_simplejwt.tokens import AccessToken
+from django.contrib.auth import get_user_model
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from user.serializers import UserSerializer
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
-@api_view(['POST'])
-def registration_view(request):
+User=get_user_model()
 
-    if request.method == 'POST':
-        serializer = RegistrationSerializer(data=request.data)
+# @api_view(['POST'])
+# def registration_view(request):
+
+#     if request.method == 'POST':
+#         serializer = RegistrationSerializer(data=request.data)
         
-        data = {}
+#         data = {}
         
-        if serializer.is_valid():
-            account = serializer.save()
+#         if serializer.is_valid():
+#             account = serializer.save()
             
-            data['response'] = "Registration Successful!"
-            data['username'] = account.username
-        else:
-            data = serializer.errors
+#             data['response'] = "Registration Successful!"
+#             data['username'] = account.username
+#         else:
+#             data = serializer.errors
         
-        return Response(data, status=status.HTTP_201_CREATED)
+#         return Response(data, status=status.HTTP_201_CREATED)
+
+class RegisterUser(APIView):
+    def post(self, request):
+        data = request.data
+        password = data.get('password')
+        confirm_password = data.get('confirmPassword')
+
+        # Check if passwords match
+        if password != confirm_password:
+            return Response({"error": "Passwords do not match."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Use UserSerializer for validation and creation
+        serializer = UserSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "User registered successfully."}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

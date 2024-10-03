@@ -12,6 +12,7 @@ function Reels() {
       fetch("http://localhost:8000/app/upload-song/")
         .then((resp) => resp.json())
         .then((data) => {
+          console.log("Reels-->",data)
           dispatch(upload(data));
         });
     };
@@ -28,7 +29,7 @@ function Reels() {
             albumId={reel.album}
             name={reel.name}
             image={reel.images[0]}
-            track={reel.tracks[1]} // Ensure this is the audio URL
+            track={reel.tracks[1]} 
           />
         );
       })}
