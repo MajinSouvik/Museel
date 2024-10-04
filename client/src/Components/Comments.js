@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { useSelector } from 'react-redux'; 
 import { TextareaAutosize } from '@mui/base/TextareaAutosize'; 
 import Comment from './Comment';  
+import { API } from "../utils/constants";
 import axios from "axios";
 
 function Comments({ id }) {   
@@ -14,7 +15,7 @@ function Comments({ id }) {
 
     useEffect(() => {     
         const getSong = () => {       
-            fetch(`http://localhost:8000/app/upload-song/${id}/`)         
+            fetch(API+`app/upload-song/${id}/`)         
                 .then((resp) => resp.json())         
                 .then((data) => {  
                     console.log("Comments-->",data.comments)         
@@ -30,7 +31,7 @@ function Comments({ id }) {
         if (!text.current.value.trim()) return; // Prevent empty comments      
     
         try {       
-            const response = await axios.post('http://localhost:8000/app/comment/', {         
+            const response = await axios.post(API+'app/comment/', {         
                 text: text.current.value,           
                 songID: id,           
                 userID: userID       

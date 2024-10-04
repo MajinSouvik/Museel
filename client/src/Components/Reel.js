@@ -8,6 +8,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import CommentIcon from "@mui/icons-material/Comment";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import { API } from "../utils/constants";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 
 function Reel({ name, image, track, musicId, albumId }) {
@@ -57,7 +58,7 @@ function Reel({ name, image, track, musicId, albumId }) {
 
   const handleChange = () => {
     const getAlbum = () => {
-      fetch(`http://localhost:8000/app/album/${albumId}/`)
+      fetch(API+`app/album/${albumId}/`)
         .then((resp) => resp.json())
         .then((data) => {
           dispatch(uploadAlbum(data));
@@ -65,7 +66,7 @@ function Reel({ name, image, track, musicId, albumId }) {
     };
 
     const getSong = () => {
-      fetch(`http://localhost:8000/app/upload-song/${musicId}/`)
+      fetch(API+`app/upload-song/${musicId}/`)
         .then((resp) => resp.json())
         .then((data) => {
           dispatch(uploadMusic(data));

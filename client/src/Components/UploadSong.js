@@ -2,6 +2,7 @@ import { useState } from "react";
 import { storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import axios from "axios";
+import {API} from "../utils/constants"
 import { v4 as uuidv4 } from "uuid"; // Import the UUID function
 
 const UploadSong = () => {
@@ -115,7 +116,7 @@ const UploadSong = () => {
         };
 
         // Send the song data to the backend API
-        const resp = await axios.post("http://localhost:8000/app/upload-song/", backendData);
+        const resp = await axios.post(API+"app/upload-song/", backendData);
         console.log("resp-->", resp);
       }
 

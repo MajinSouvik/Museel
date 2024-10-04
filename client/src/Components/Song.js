@@ -1,12 +1,13 @@
 import { useDispatch } from "react-redux";
 import { uploadMusic } from "../redux/musicSlice";
+import { API } from "../utils/constants";
 
 function Song({ musicId, name, artists }) {
     const dispatch = useDispatch();
 
     const handleChange = () => {
         const getSong = () => {
-            fetch("http://localhost:8000/app/upload-song/" + musicId + "/")
+            fetch(API+"app/upload-song/" + musicId + "/")
                 .then(resp => resp.json())
                 .then(data => {
                     dispatch(uploadMusic(data));

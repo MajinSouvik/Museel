@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { upload } from "../redux/reelSlice";
+import { API } from "../utils/constants";
 import Reel from "./Reel";
 
 function Reels() {
@@ -9,7 +10,7 @@ function Reels() {
 
   useEffect(() => {
     const getReels = () => {
-      fetch("http://localhost:8000/app/upload-song/")
+      fetch(API+"app/upload-song/")
         .then((resp) => resp.json())
         .then((data) => {
           console.log("Reels-->",data)
