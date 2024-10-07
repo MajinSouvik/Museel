@@ -1,32 +1,31 @@
 import { useState } from "react";
 import { storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import axios from "axios";
-import {API} from "../utils/constants"
-import { v4 as uuidv4 } from "uuid"; // Import the UUID function
+import { v4 as uuidv4 } from "uuid";
+import api from "../utils/api"; 
 
 const UploadSong = () => {
   const [albumFolder, setAlbumFolder] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Handle album folder upload
+  
   const handleAlbumFolderChange = (e) => {
-    setAlbumFolder(e.target.files); // Set the entire folder content (with all subfolders and files)
+    setAlbumFolder(e.target.files); 
   };
 
-  // Helper function to upload files to Firebase and return the download URL
+  
   const uploadFileToFirebase = async (file, path) => {
-    const uniqueFileName = `${uuidv4()}_${file.name}`; // Generate a unique file name using uuid
+    const uniqueFileName = `${uuidv4()}_${file.name}`; 
     const fileRef = ref(storage, `${path}/${uniqueFileName}`);
     await uploadBytes(fileRef, file);
     return getDownloadURL(fileRef);
   };
 
-  // Function to extract artist list from the "artists.txt" file if applicable
+ 
   const extractArtistsFromFile = async (artistsFile) => {
     try {
       const text = await artistsFile.text();
-      const cleanText = text.replace(/[\[\]]/g, ""); // Clean up the artist string if needed
+      const cleanText = text.replace(/[\[\]]/g, ""); 
       const artistList = cleanText.split(",").map((artist) => artist.trim());
       return artistList;
     } catch (error) {
@@ -35,29 +34,29 @@ const UploadSong = () => {
     }
   };
 
-  // Organize uploaded files by their song folder
+  
   const organizeFilesBySong = () => {
     const organizedFiles = {};
     if (!albumFolder) return organizedFiles;
 
-    const albumName = albumFolder[0].webkitRelativePath.split("/")[0]; // Top-level folder is the album name
+    const albumName = albumFolder[0].webkitRelativePath.split("/")[0]; 
     for (let i = 0; i < albumFolder.length; i++) {
       const file = albumFolder[i];
       const pathSegments = file.webkitRelativePath.split("/");
 
-      // If this is the album image (located in the root folder)
+      
       if (file.name.includes("album")) {
         organizedFiles["albumImage"] = file;
-        continue; // Skip to the next file since it's the album image
+        continue;
       }
 
-      const songName = pathSegments[1]; // Subfolder (song) name
+      const songName = pathSegments[1]; 
 
       if (!organizedFiles[songName]) {
-        organizedFiles[songName] = {}; // Create an object for each song
+        organizedFiles[songName] = {};
       }
 
-      // Organize files for each song by their type
+      
       if (file.name.includes("image1")) {
         organizedFiles[songName].image1 = file;
       } else if (file.name.includes("image2")) {
@@ -71,10 +70,10 @@ const UploadSong = () => {
       }
     }
 
-    return { organizedFiles, albumName }; // Return both organized files and album name
+    return { organizedFiles, albumName }; 
   };
 
-  // Handle form submission and upload process
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -82,41 +81,41 @@ const UploadSong = () => {
     try {
       const { organizedFiles, albumName } = organizeFilesBySong();
 
-      // Upload the album image only once
+     
       const albumImage = organizedFiles["albumImage"];
       const albumImageUrl = albumImage
         ? await uploadFileToFirebase(albumImage, "albumImages")
         : "";
 
-      // Loop through each song and upload its associated files
+   
       for (const songName in organizedFiles) {
-        if (songName === "albumImage") continue; // Skip the album image entry
+        if (songName === "albumImage") continue; 
 
         const { image1, image2, orig, trim, artistsFile } = organizedFiles[songName];
 
-        // Upload files to Firebase and get URLs
+    
         const image1Url = image1 ? await uploadFileToFirebase(image1, "images") : "";
         const image2Url = image2 ? await uploadFileToFirebase(image2, "images") : "";
         const trackUrl = orig ? await uploadFileToFirebase(orig, "tracks") : "";
         const previewTrackUrl = trim ? await uploadFileToFirebase(trim, "previewTracks") : "";
 
-        // Extract artists if there is an artists.txt file
+      
         const artists = artistsFile ? await extractArtistsFromFile(artistsFile) : [];
 
-        // Prepare the data to send to the backend
+     
         const backendData = {
-          name: songName, // Song name is the subfolder name
+          name: songName, 
           imgUrl1: image1Url,
           imgUrl2: image2Url,
-          image: albumImageUrl, // Reuse the same album image for all songs
+          image: albumImageUrl,
           trackUrl: trackUrl,
           previewUrl: previewTrackUrl,
           artists,
-          album: albumName, // Album name is the top-level folder
+          album: albumName, 
         };
 
-        // Send the song data to the backend API
-        const resp = await axios.post(API+"app/upload-song/", backendData);
+       
+        const resp = await api.post("app/upload-song/", backendData);
         console.log("resp-->", resp);
       }
 
@@ -166,15 +165,3 @@ const UploadSong = () => {
 };
 
 export default UploadSong;
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,39 +1,13 @@
 from rest_framework import status
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from user.serializers import UserSerializer
-# from django.contrib.auth.models import User
-from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
+from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import AccessToken
 from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from user.serializers import UserSerializer
-from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError
 
 User=get_user_model()
-
-# @api_view(['POST'])
-# def registration_view(request):
-
-#     if request.method == 'POST':
-#         serializer = RegistrationSerializer(data=request.data)
-        
-#         data = {}
-        
-#         if serializer.is_valid():
-#             account = serializer.save()
-            
-#             data['response'] = "Registration Successful!"
-#             data['username'] = account.username
-#         else:
-#             data = serializer.errors
-        
-#         return Response(data, status=status.HTTP_201_CREATED)
 
 class RegisterUser(APIView):
     def post(self, request):
@@ -41,11 +15,9 @@ class RegisterUser(APIView):
         password = data.get('password')
         confirm_password = data.get('confirmPassword')
 
-        # Check if passwords match
         if password != confirm_password:
             return Response({"error": "Passwords do not match."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Use UserSerializer for validation and creation
         serializer = UserSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -59,7 +31,6 @@ def get_user_details(request):
     userID=request.data.get('user_id')
     user=User.objects.get(id=userID)
     user_serializer = UserSerializer(user)
-    print("user-->",user_serializer.data)
     return Response(user_serializer.data, status=status.HTTP_200_OK)
 
 class Login(TokenObtainPairView):

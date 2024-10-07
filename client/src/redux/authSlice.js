@@ -14,16 +14,6 @@ const authSlice=createSlice({
             }
         }:{}
     },
-
-
-    // {
-    //     "username": "megha",
-    //     "email": "megha@gmail.com",
-    //     "profilePic": "https://firebasestorage.googleapis.com/v0/b/museel-972fc.appspot.com/o/upload%2F6300823491632545849.jpgac7ffe04-85cd-4ba2-b5ef-1b3ef07670b4?alt=media&token=81daa428-067d-4931-b1f4-f2f44689047a"
-    // }
-
-
-
     reducers:{
         login:(state,action)=>{
             state.auth=action.payload
@@ -41,11 +31,22 @@ const authSlice=createSlice({
             localStorage.removeItem('id');
             localStorage.removeItem('username');
             localStorage.removeItem('profilePic');
-        }
+        },
+
+        refreshAccessToken: (state, action) => {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            
+            state.auth.access_token= action.payload.tokens.access;
+            state.auth.refresh_token= action.payload.tokens.refresh;
+
+            localStorage.setItem('access', action.payload.tokens.access);
+            localStorage.setItem('refresh', action.payload.tokens.refresh);
+          },
     }
 })
 
 
-export const {login, logout}=authSlice.actions
+export const {login, logout, refreshAccessToken}=authSlice.actions
 export default authSlice.reducer
 

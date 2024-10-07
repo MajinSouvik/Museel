@@ -1,4 +1,4 @@
-server/museel_backend/spotify/credentials.py
+client/.env
 client/node_modules
-client/src/credentials.js
 server/menv
+server/.env

@@ -1,19 +1,18 @@
 import { useDispatch } from "react-redux";
 import { uploadMusic } from "../redux/musicSlice";
-import { API } from "../utils/constants";
+import api from "../utils/api";
 
 function Song({ musicId, name, artists }) {
     const dispatch = useDispatch();
 
-    const handleChange = () => {
-        const getSong = () => {
-            fetch(API+"app/upload-song/" + musicId + "/")
-                .then(resp => resp.json())
-                .then(data => {
-                    dispatch(uploadMusic(data));
-                });
-        };
-        getSong();
+    const handleChange = async () => {
+        try {
+      
+            const response = await api.get(`app/upload-song/${musicId}/`);
+            dispatch(uploadMusic(response.data));
+        } catch (error) {
+            console.error("Error fetching song data:", error);
+        }
     };
 
     return (
@@ -21,13 +20,13 @@ function Song({ musicId, name, artists }) {
             className="flex items-center justify-between p-4 bg-gray-800 rounded-lg shadow-md hover:bg-gray-700 cursor-pointer transition duration-300"
             onClick={() => handleChange()}
         >
-            {/* Song Info */}
+        
             <div>
                 <p className="text-white text-lg font-medium">{name}</p>
                 <p className="text-gray-400">{artists.join(", ")}</p>
             </div>
 
-            {/* Play Icon (or another visual indicator if needed) */}
+     
             <svg
                 className="w-6 h-6 text-green-400"
                 fill="none"
@@ -47,3 +46,4 @@ function Song({ musicId, name, artists }) {
 }
 
 export default Song;
+

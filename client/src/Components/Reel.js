@@ -8,7 +8,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import CommentIcon from "@mui/icons-material/Comment";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
-import { API } from "../utils/constants";
+import api from "../utils/api"; 
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 
 function Reel({ name, image, track, musicId, albumId }) {
@@ -56,25 +56,18 @@ function Reel({ name, image, track, musicId, albumId }) {
     }
   };
 
-  const handleChange = () => {
-    const getAlbum = () => {
-      fetch(API+`app/album/${albumId}/`)
-        .then((resp) => resp.json())
-        .then((data) => {
-          dispatch(uploadAlbum(data));
-        });
-    };
+  const handleChange = async () => {
+    try {
+      // Get album data using the Axios instance
+      const albumResponse = await api.get(`app/album/${albumId}/`);
+      dispatch(uploadAlbum(albumResponse.data));
 
-    const getSong = () => {
-      fetch(API+`app/upload-song/${musicId}/`)
-        .then((resp) => resp.json())
-        .then((data) => {
-          dispatch(uploadMusic(data));
-        });
-    };
-
-    getAlbum();
-    getSong();
+      // Get song data using the Axios instance
+      const songResponse = await api.get(`app/upload-song/${musicId}/`);
+      dispatch(uploadMusic(songResponse.data));
+    } catch (error) {
+      console.error("Error fetching album or song data:", error);
+    }
   };
 
   const handleCommentClick = (e) => {
@@ -106,11 +99,10 @@ function Reel({ name, image, track, musicId, albumId }) {
             </div>
 
             <audio ref={audioRef} src={track} loop />
-
           </div>
         </Link>
 
-        {/* Icons positioned to the right of the Reel component */}
+   
         <div className="absolute top-1/2 right-[-50px] transform -translate-y-1/2 flex flex-col items-center space-y-5 z-20">
           <FavoriteBorderIcon 
             sx={{ fontSize: 30, color: "black", cursor: "pointer" }} 
@@ -137,7 +129,7 @@ function Reel({ name, image, track, musicId, albumId }) {
           )}
         </div>
 
-        {/* Render Comments component next to the Comment Icon when clicked */}
+   
         {clicked && (
           <div className="absolute top-1/2 right-[-380px] transform -translate-y-3/4 z-30">
             <Comments id={musicId} />
@@ -149,6 +141,5 @@ function Reel({ name, image, track, musicId, albumId }) {
 }
 
 export default Reel;
-
 
 

@@ -1,9 +1,7 @@
 import { useEffect } from "react"
 import {useDispatch} from "react-redux"
-import axios from "axios"
 import { setSongs} from "../redux/musicSlice";
-import {API} from "../utils/constants"
-axios.defaults.withCredentials = true;
+import api from "../utils/api";
 
 function useGetAllSongs(){
   const dispatch = useDispatch();
@@ -11,10 +9,9 @@ function useGetAllSongs(){
   useEffect(() => {
     const getAll = async () => {
       try {
-        const response = await axios.get(API+"app/upload-song/");
+        const response = await api.get("app/upload-song/");
         dispatch(setSongs(response.data))
       } catch (error) {
-        console.error("Error fetching posts:", error);
       }
     };
 

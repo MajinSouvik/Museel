@@ -64,13 +64,13 @@ const SignUp = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-cover bg-center relative bg-[url('https://source.unsplash.com/1600x900/?travel')]">
-      {/* Gradient overlay */}
+
       <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500 opacity-60"></div>
 
       <div className="relative z-10 bg-white bg-opacity-90 p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Join Museel</h1>
 
-        {/* Username Field */}
+
         <input
           ref={usernameRef}
           type="text"
@@ -78,7 +78,7 @@ const SignUp = () => {
           className="w-full p-3 rounded-lg bg-gray-100 border border-gray-300 mb-4"
         />
 
-        {/* Email Field */}
+
         <input
           ref={emailRef}
           type="email"
@@ -86,7 +86,7 @@ const SignUp = () => {
           className="w-full p-3 rounded-lg bg-gray-100 border border-gray-300 mb-4"
         />
 
-        {/* Password Field */}
+  
         <input
           ref={passwordRef}
           type="password"
@@ -94,7 +94,7 @@ const SignUp = () => {
           className="w-full p-3 rounded-lg bg-gray-100 border border-gray-300 mb-4"
         />
 
-        {/* Confirm Password Field */}
+
         <input
           ref={confirmPasswordRef}
           type="password"
@@ -102,7 +102,7 @@ const SignUp = () => {
           className="w-full p-3 rounded-lg bg-gray-100 border border-gray-300 mb-4"
         />
 
-        {/* Profile Picture Upload */}
+
         <div className="flex items-center justify-center mb-4">
           {profilePic ? (
             <img
@@ -129,7 +129,7 @@ const SignUp = () => {
           </div>
         </label>
 
-        {/* Sign Up Button */}
+
         <button
           onClick={handleSubmit}
           className="w-full bg-teal-500 text-white font-bold p-3 rounded-lg mt-4 hover:bg-teal-600 transition"
@@ -137,7 +137,7 @@ const SignUp = () => {
           Sign Up
         </button>
 
-        {/* Login Link */}
+  
         <p className="text-center text-gray-600 mt-4">
           Already have an account?{' '}
           <a href="/login" className="text-blue-500 hover:underline">

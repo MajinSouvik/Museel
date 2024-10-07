@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sr2apw75cot$oiui4(o*0^=xs3haqyo2v3+oo2!yseq%+t9^@s'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['localhost']
 AUTH_USER_MODEL='user.CustomUser'
@@ -48,6 +49,8 @@ INSTALLED_APPS = [
 
 CORS_ALLOWED_ORIGINS=['http://localhost:3000', 'http://localhost:8000']
 
+
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -61,6 +64,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'museel_backend.urls'
 CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+
+
 
 TEMPLATES = [
     {
@@ -90,25 +95,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'djongo',
-#         'NAME': 'Museel',
-#         'CLIENT': {
-#            'host': 'mongodb+srv://Souvik:SKisoerZ7L8JMRsZ@cluster0.m5bi1ep.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
-#            'username':'Souvik',
-#            'password':'SKisoerZ7L8JMRsZ'
-#         }
-#     }
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mmysql',
-#         'NAME': 'spotify',
-#     }
-# }
 
 
 # Password validation

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { upload } from "../redux/reelSlice";
-import { API } from "../utils/constants";
+import api from "../utils/api"; 
 import Reel from "./Reel";
 
 function Reels() {
@@ -9,14 +9,16 @@ function Reels() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const getReels = () => {
-      fetch(API+"app/upload-song/")
-        .then((resp) => resp.json())
-        .then((data) => {
-          console.log("Reels-->",data)
-          dispatch(upload(data));
-        });
+    const getReels = async () => {
+      try {
+        const response = await api.get("app/upload-song/"); 
+        const data = response.data; 
+        dispatch(upload(data)); 
+      } catch (error) {
+        console.error("Error fetching reels:", error);
+      }
     };
+
     getReels();
   }, [dispatch]);
 

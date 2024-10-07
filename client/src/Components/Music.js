@@ -22,13 +22,13 @@ function Music() {
         <div className="bg-gray-900 text-white min-h-screen p-4">
             <Search />
             <div className="grid grid-cols-4 gap-8">
-                {/* Sidebar */}
+        
                 <div className="col-span-1 bg-gray-800 p-4 rounded-md">
                     <h2 className="text-lg font-semibold mb-4">Browse Albums</h2>
                     <Albums albums={albums} />
                 </div>
 
-                {/* Main Content */}
+       
                 <div className="col-span-3 flex flex-col h-screen">
                     <MusicHeader image={album.image} title={album.name} />
                     <div className="flex-grow mt-6 overflow-y-auto custom-scrollbar">
@@ -38,7 +38,7 @@ function Music() {
                 </div>
             </div>
 
-            {/* Sticky Audio Player */}
+
             <div className="fixed bottom-0 left-0 right-0 bg-gray-800 p-4 shadow-lg">
                 <AudioPlayer src={music.tracks[0]} image={music.images[0]} />
             </div>
